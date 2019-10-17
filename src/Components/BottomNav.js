@@ -12,7 +12,7 @@ export default class FooterTabsBadgeExample extends Component {
               <Text  style={style.title}>Home</Text>
             </Button>
             <Button active badge vertical style={style.active}>
-              <Badge ><Text>51</Text></Badge>
+              <Badge info ><Text>51</Text></Badge>
               <Icon active name="cart"style={style.active} />
               <Text>CRAT</Text>
             </Button>

@@ -22,7 +22,7 @@ class Profile extends Component {
           this.setState({ test: res.data.token })
           console.log(res.data.token)
           this.setState({ message: 'Success Login'})
-          this.props.navigation.navigate('Home')
+          this.props.navigation.navigate('Main')
           // storage.set('token', res.data.token)
           // storage.set('email', this.state.email)
 

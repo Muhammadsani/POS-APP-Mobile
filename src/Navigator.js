@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation-stack'
 import Home from './Screens/Home'
 import Profile from './Screens/Profile'
 import Login from './Screens/Login'
+import Main from "./Screens/Main";
 
 const MainNavigator = createStackNavigator({
     
@@ -20,9 +21,15 @@ const MainNavigator = createStackNavigator({
             header: null
         }
     } ,
+    Main : {
+        screen: Main,
+        navigationOptions: {
+            header: null
+        }
+    } ,
 }, 
 {
-    initialRouteName: 'Home'
+    initialRouteName: 'Login'
 })
 
 export default createAppContainer(MainNavigator)
