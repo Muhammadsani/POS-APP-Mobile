@@ -2,7 +2,7 @@ import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 
 import Home from './Screens/Home'
-import Profile from './Screens/Profile'
+import Cart from './Screens/Cart'
 import Login from './Screens/Login'
 import Main from "./Screens/Main";
 
@@ -14,7 +14,12 @@ const MainNavigator = createStackNavigator({
             header: null
         }
     },
-    Profile,
+    Cart : {
+        screen: Cart,
+        navigationOptions: {
+            headerTitle: "CART"
+        }
+    },
     Login : {
         screen: Login,
         navigationOptions: {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ImagePicker from 'react-native-image-picker';
 import axios from "../Utils/axios"
 import { ScrollView } from 'react-native'
 import { View, Text, Form, Item, Button, Input, Picker } from 'native-base'
@@ -11,7 +12,7 @@ class Profile extends Component {
       categories: [],
       category: 0,
       description: '',
-      image: "",
+      image: '',
       name: "",
       price: '',
       quantity: '',
@@ -41,13 +42,25 @@ class Profile extends Component {
     data.append('category', this.state.category);
     data.append('description', this.state.description);
     data.append('quantity', this.state.quantity);
-    data.append('image', this.state.image);
+    data.append("image", {
+      name: this.state.image.fileName,
+      type: this.state.image.type,
+      uri:
+        Platform.OS === "android" ? this.state.image.uri : this.state.image.uri.replace("file://", "")
+    });
 
 
     axios.post('/product', data)
       .then(response => {
         console.log(response)
-        // window.location.href = "/"
+        alert('Success Add Product')
+        this.setState({
+          description: '',
+          image: '',
+          name: "",
+          price: '',
+          quantity: ''
+        })
       })
       .catch(error => {
         console.log(error.response.data.message)
@@ -61,6 +74,17 @@ class Profile extends Component {
       selected: value,
       category: value
     });
+  }
+
+  handleChoosePhoto = () => {
+    const options = {
+      noData: true,
+    }
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.uri) {
+        this.setState({ image: response })
+      }
+    })
   }
 
   render() {
@@ -80,7 +104,9 @@ class Profile extends Component {
                 <Input placeholder="Price" placeholderTextColor="crimson" style={{ color: "crimson" }} onChangeText={(value) => this.setState({ price: value })} value={this.state.price} />
               </Item>
               <Item style={{ borderBottomColor: "red" }}>
-                <Input placeholderTextColor="crimson" style={{ color: "crimson" }} placeholder="File Image" onChangeText={(value) => this.setState({ image: value })} value={this.state.image} />
+                <Button small transparent title="Choose Photo" onPress={this.handleChoosePhoto} ><Text style={{ color: 'crimson' }}>image</Text></Button>
+                <Text>{this.state.image.fileName}</Text>
+                {/* <Input placeholderTextColor="crimson" style={{ color: "crimson" }} placeholder="File Image" onChangeText={(value) => this.setState({ image: value })} value={this.state.image} /> */}
               </Item>
               <Item style={{ borderBottomColor: "red" }}>
                 <Picker
@@ -90,8 +116,8 @@ class Profile extends Component {
                   selectedValue={this.state.selected}
                   onValueChange={this.onValueChange.bind(this)}
                 >
-                  {this.state.categories.map(item => (
-                    <Picker.Item key={item.id} label={item.name} value={item.id} />
+                  {this.state.categories.map((item, index) => (
+                    <Picker.Item key={index} label={item.name} value={item.id} />
                   ))}
                 </Picker>
               </Item>
@@ -102,7 +128,6 @@ class Profile extends Component {
                 <Input placeholderTextColor="crimson" style={{ color: "crimson" }} placeholder="Quantity" onChangeText={(value) => this.setState({ quantity: value })} value={this.state.quantity} />
               </Item>
             </Form>
-            <Text>{this.state.name}</Text>
             <Button light style={{ marginTop: 30, alignSelf: 'center' }} onPress={() => this.addProduct()}><Text style={{ fontWeight: "bold", color: "crimson" }}> ADD </Text></Button>
           </View>
         </ScrollView>

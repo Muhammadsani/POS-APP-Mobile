@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, ImageBackground, View } from "react-native";
+import { StyleSheet, ImageBackground, View, AsyncStorage, ToastAndroid } from "react-native";
 import axios from "../Utils/axios"
 import BGimage from "../asset/bg.jpg";
 import { Container, Header, Content, Form, Item, Input, Button, Text, Title } from 'native-base'
@@ -18,10 +18,12 @@ class Profile extends Component {
   login = (data) => {
     return new Promise((resolve, reject) => {
       axios.post('/user/login', data)
-        .then((res) => {
+        .then(async(res) => {
           this.setState({ test: res.data.token })
-          console.log(res.data.token)
           this.setState({ message: 'Success Login'})
+          await AsyncStorage.setItem('token', res.data.token)
+          await AsyncStorage.setItem('email', res.data.email)
+          console.log(res.data.token)
           this.props.navigation.navigate('Main')
           // storage.set('token', res.data.token)
           // storage.set('email', this.state.email)
@@ -30,9 +32,9 @@ class Profile extends Component {
           // window.location.href = "/"
         }).catch((err) => {
           console.log(err.response.data.message)
-          this.setState({ message: err.response.data.message})
 
-          // alert(err.response.data.message)
+          ToastAndroid.show(err.response.data.message, ToastAndroid.SHORT)
+          //alert(err.response.data.message)
         })
     })
   }
@@ -52,7 +54,6 @@ class Profile extends Component {
               <Input secureTextEntry placeholder="Password" placeholderTextColor="crimson" style={{ color: "crimson" }} onChangeText={(value) => this.setState({ password: value })} value={this.state.password} />
             </Item>
           </Form>
-          <Text style={{ color: "crimson", alignSelf:'center' }}>{this.state.message} </Text>
           <Button light style={{ marginTop: 30, alignSelf: 'center' }} onPress={() => this.login({ email: this.state.email, password: this.state.password })}><Text style={{ fontWeight: "bold", color: "crimson" }}> LOGIN </Text></Button>
         </View>
       </ImageBackground>

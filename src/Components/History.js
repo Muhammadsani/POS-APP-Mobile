@@ -162,9 +162,9 @@ class Profile extends Component {
 
   render() {
 
-    let orderlist = this.state.order.map(item => {
+    let orderlist = this.state.order.map((item, index) => {
       return (
-        <CardItem key={item.id} bordered style={{ flexDirection: "column", alignContent: 'flex-start' }}>
+        <CardItem key={index} bordered style={{ flexDirection: "column", alignContent: 'flex-start' }}>
           <Text style={{ fontWeight: "bold", alignSelf: 'flex-start' }}>#{item.receipt_no}</Text>
           <Text style={{ alignSelf: 'flex-start' }} >{item.created_at}</Text>
           <Text style={{ alignSelf: 'flex-start' }} >{item.name_order}</Text>
